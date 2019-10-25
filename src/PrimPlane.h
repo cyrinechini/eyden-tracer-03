@@ -36,7 +36,11 @@ public:
 	virtual CBoundingBox calcBounds(void) const override
 	{
 		CBoundingBox bounds;
-		// --- PUT YOUR CODE HERE ---
+        float inf = std::numeric_limits<double>::infinity();
+        Vec3f min(inf, inf, inf);
+        Vec3f max(-inf, -inf, -inf);
+        bounds.extend(min);
+        bounds.extend(max);
 		return bounds;
 	}
 	

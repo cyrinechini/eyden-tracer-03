@@ -6,6 +6,8 @@
 #ifdef ENABLE_BSP
 #include "BSPTree.h"
 #endif
+#include <iostream>
+#include "PrimTriangle.h"
 
 /**
  * @brief Scene class
@@ -35,8 +37,7 @@ public:
 	 * @brief Adds a new primitive to the scene
 	 * @param prim Pointer to the primitive
 	 */
-	void Add(const std::shared_ptr<CPrim> pPrim)
-	{
+	void Add(const std::shared_ptr<CPrim> pPrim) {
 		m_vpPrims.push_back(pPrim);
 	}
 	/**
@@ -48,6 +49,7 @@ public:
 		m_vpLights.push_back(pLight);
 	}
   
+    
 	/**
 	 * @brief Checks intersection of ray \b ray with all contained objects
 	 * @param ray The ray
@@ -60,8 +62,9 @@ public:
 		return m_pBSPTree->Intersect(ray);
 #else
 		bool hit = false;
-		for (auto pPrim : m_vpPrims)
-		  hit |= pPrim->Intersect(ray);
+        for (auto pPrim : m_vpPrims) {
+            hit |= pPrim->Intersect(ray);
+        }
 		return hit;
 #endif
 	}
@@ -81,7 +84,7 @@ public:
 #endif
 	}
 
-#ifdef ENABLE_BSP
+ #ifdef ENABLE_BSP
 	/**
 	 * @brief Calculates and return the bounding box, containing the whole scene
 	 * @return The bounding box, containing the whole scene
@@ -89,7 +92,11 @@ public:
 	CBoundingBox CalcBounds(void)
 	{
 		CBoundingBox res;
-		// --- PUT YOUR CODE HERE ---
+		
+        for (auto pPrim : m_vpPrims) {
+            res.extend(pPrim->calcBounds());
+        }
+        
 		return res;
 	}
 	/**
@@ -103,6 +110,7 @@ public:
 		m_pBSPTree = std::make_unique<BSPTree>(box, m_vpPrims);
 	}
 #endif
+
 	
 	/**
 	 * @brief Traces the given ray and shade it

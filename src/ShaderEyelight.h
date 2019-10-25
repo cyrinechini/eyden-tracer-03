@@ -27,7 +27,7 @@ public:
 		if (cos > 0) return RGB(0, 0, 0);
 		return CShaderFlat::Shade() * fabs(cos);
 		
-		return CShaderFlat::Shade() * fabs(ray.dir.dot(ray.hit->GetNormal(ray)));
+		//return CShaderFlat::Shade() * fabs(ray.dir.dot(ray.hit->GetNormal(ray)));
 	}
 };
 

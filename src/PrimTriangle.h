@@ -23,6 +23,7 @@ public:
 		, m_c(c)
   	{}
 	virtual ~CPrimTriangle(void) = default;
+    
 	
 	virtual bool Intersect(Ray& ray) override
 	{
@@ -32,6 +33,7 @@ public:
 		const Vec3f pvec = ray.dir.cross(edge2);
 		
 		const float det = edge1.dot(pvec);
+
 		if (fabs(det) < Epsilon) return false;
 		
 		const float inv_det = 1.0f / det;
@@ -68,7 +70,9 @@ public:
 	virtual CBoundingBox calcBounds(void) const override
 	{
 		CBoundingBox res;
-		// --- PUT YOUR CODE HERE ---
+        res.extend(m_a);
+        res.extend(m_b);
+        res.extend(m_c);
 		return res;
 	}
 	

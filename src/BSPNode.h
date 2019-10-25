@@ -44,13 +44,43 @@ public:
 	 */
 	virtual bool traverse(Ray& ray, float& t0, float& t1)
 	{
-		if (isLeaf()) {
-			// --- PUT YOUR CODE HERE ---
-			return true;
-		} else {
-			// --- PUT YOUR CODE HERE ---
-			return true;
-		}
+        if (this->isLeaf()) {
+            bool hit = false;
+            for (auto pPrim : this->m_vpPrims) {
+                hit |= pPrim->Intersect(ray);
+            }
+            return hit;
+        }
+        else {
+            std::shared_ptr<CBSPNode> t_near, t_far;
+            float d = (this->m_splitVal - ray.org[this->m_splitDim])
+                            / ray.dir[this->m_splitDim];
+            if (d > 0) {
+                t_near = m_pLeft;
+                t_far = m_pRight;
+            } else {
+                t_near = m_pRight;
+                t_far = m_pLeft;
+            }
+            
+            if (ray.dir[this->m_splitDim] < 0) {
+                std::shared_ptr<CBSPNode> aux = t_near;
+                t_near = t_far;
+                t_far = aux;
+            }
+            
+            if (d < t0) {
+                return t_far->traverse(ray,t0,t1);
+            } else if (d > t1) {
+                return t_near->traverse(ray, t0, t1);
+            } else {
+                bool hit = t_near->traverse(ray, t0, d);
+                if (hit) {
+                    return hit;
+                }
+                return t_far->traverse(ray, d, t1);
+            }
+        }
 	}
 
 	/**

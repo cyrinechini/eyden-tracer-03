@@ -62,10 +62,16 @@ public:
 		return normal;
 	}
 
+    
 	virtual CBoundingBox calcBounds(void) const override
 	{
-		CBoundingBox res;
-		// --- PUT YOUR CODE HERE ---
+        CBoundingBox res(Vec3f(m_center.val[0] - m_radius,
+                               m_center.val[1] - m_radius,
+                               m_center.val[2] - m_radius),
+                         Vec3f(m_center.val[0] + m_radius,
+                               m_center.val[1] + m_radius,
+                               m_center.val[2] + m_radius));
+        
 		return res;
 	}
 	
